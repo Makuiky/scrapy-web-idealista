@@ -23,10 +23,10 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 
 ROBOTSTXT_OBEY = True
 
 #Desired file format
-FEED_FORMAT="csv"
+#FEED_FORMAT="csv"
 
 # Name of the file where data extracted is stored
-FEED_URI = "ejemplo_pisos.csv"
+#FEED_URI = "ejemplo_pisos.csv"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 2

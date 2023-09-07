@@ -11,7 +11,6 @@ import scrapy
 import csv
 from scrapy.linkextractors import LinkExtractor
 from idealista.items import Piso
-from idealista.items import UrlPiso
 from scrapy.http import Request
 import sqlite3
 import re
@@ -19,6 +18,9 @@ import re
 class IdealistaSpider(scrapy.Spider):
     # Nombre de la araña
     name = 'idealista'
+    custom_settings = {
+        'ITEM_PIPELINES': {'idealista.pipelines.SqliteRutinaItemsPiso': 300,}
+    }
 
     allowed_domains = ['idealista.com']
     

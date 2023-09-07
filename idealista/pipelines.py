@@ -65,3 +65,78 @@ class SqliteRutinaurlpiso(object):
             self.conn.commit()
     def close_spider(self, spider):
         self.cur.close()
+
+class SqliteRutinaItemsPiso(object):
+    def __init__(self):
+        self.create_connection()
+        self.create_table()
+
+    def create_connection(self):
+        self.conn = sqlite3.connect('idealista.db')
+        self.cur = self.conn.cursor()
+
+    def create_table(self):
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS items_pisos
+                         (id_piso INT PRIMARY KEY, 
+                         nombre_piso VARCHAR(200),
+                         ubicacion VARCHAR(50),                   
+                         precio INT,
+                         euros_m2 INT,
+                         m2_construido SMALLINT,
+                         m2_util SMALLINT,
+                         num_habitaciones TINYINT,
+                         aseos TINYINT,
+                         planta TINYINTUNSIGNED,
+                         ascensor VARCHAR(15),
+                         url VARCHAR(400),
+                         calle VARCHAR(100),
+                         barrio VARCHAR(100),
+                         distrito VARCHAR(100),
+                         disposicion_a_la_calle VARCHAR(10),
+                         fecha_de_registro TIMESTAMP
+                        )''')
+        
+    def process_item(self, item, spider):
+            self.guardar_item_piso(item)
+            return item
+    
+    def guardar_item_piso(self, item):      
+        self.cur.execute("""INSERT OR IGNORE INTO items_pisos(
+                         id_piso, 
+                         nombre_piso,
+                         ubicacion,                   
+                         precio,
+                         euros_m2,
+                         m2_construido,
+                         m2_util,
+                         num_habitaciones,
+                         aseos,
+                         planta,
+                         ascensor,
+                         url,
+                         calle,
+                         barrio,
+                         distrito,
+                         disposicion_a_la_calle,
+                         fecha_de_registro
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)""",(
+                            item.get('idpiso'),
+                            item.get('nombre'),
+                            item.get('ubicacion'),
+                            item.get('precio'),
+                            item.get('eurosporm2'),
+                            item.get('m2const'),
+                            item.get('m2util'),
+                            item.get('habitaciones'),
+                            item.get('wc'),
+                            item.get('planta'),
+                            item.get('ascensor'),
+                            item.get('urlpiso'),
+                            item.get('calle'),
+                            item.get('barrio'),
+                            item.get('distrito'),
+                            item.get('exteinte'),
+        ))
+        self.conn.commit()
+    def close_spider(self, spider):
+        self.cur.close()
