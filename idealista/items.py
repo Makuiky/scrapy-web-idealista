@@ -14,7 +14,8 @@ class Piso(scrapy.Item):
     ubicacion = scrapy.Field()
     precio = scrapy.Field()
     eurosporm2 = scrapy.Field()
-    m2 = scrapy.Field()
+    m2const = scrapy.Field()
+    m2util = scrapy.Field()
     habitaciones = scrapy.Field()
     wc = scrapy.Field()
     planta = scrapy.Field()
@@ -22,7 +23,8 @@ class Piso(scrapy.Item):
     urlpiso =scrapy.Field()
     calle = scrapy.Field()
     barrio = scrapy.Field()
-    distrito = scrapy.Field() 
+    distrito = scrapy.Field()
+    exteinte = scrapy.Field() 
     pass
 
 

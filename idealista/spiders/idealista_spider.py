@@ -41,16 +41,26 @@ class IdealistaSpider(scrapy.Spider):
         piso = Piso()
         piso['nombre'] = response.xpath('//span[@class="main-info__title-main"]/text()').extract_first()
         piso['ubicacion'] = response.xpath('//span[@class="main-info__title-minor"]/text()').extract_first()
-        piso['precio'] = response.xpath('//strong[@class="flex-feature-details"]/text()').extract_first()
-        piso['eurosporm2'] = response.xpath('//p[@class="flex-feature squaredmeterprice"]/span[2]/text()').extract_first()
-        piso['m2'] = response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"m²")]/text()').extract_first()
-        piso['habitaciones'] = response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"habitaciones")]/text()').extract_first()
-        piso['wc'] = response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"baño")]/text()').extract_first()
-        piso['planta'] = response.xpath('//div[@class="details-property_features"][2]/ul/li[contains(text(),"Planta")]/text()').extract_first()
+        piso['precio'] = int(''.join(re.findall(r'[0-9]+',response.xpath('//strong[@class="flex-feature-details"]/text()').extract_first())))
+        piso['eurosporm2'] = int(''.join(re.findall(r'[0-9]+',response.xpath('//p[@class="flex-feature squaredmeterprice"]/span[2]/text()').extract_first())))
+
+        m2= re.findall(r'[0-9]+',response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"m²")]/text()').extract_first())
+        piso['m2const'] = int(m2[0])
+        if len(m2)>1:
+            piso['m2util'] = int(m2[1])
+
+        piso['habitaciones'] = int(re.findall(r'[0-9]+',response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"habitaciones")]/text()').extract_first())[0])
+        piso['wc'] = int(re.findall(r'[0-9]+',response.xpath('//div[@class="details-property_features"]/ul[1]/li[contains(text(),"baño")]/text()').extract_first())[0])
+
+        plantaextint = response.xpath('//div[@class="details-property_features"][2]/ul/li[contains(text(),"Planta")]/text()').extract_first() 
+        piso['planta'] = int(re.findall(r'[0-9+]',plantaextint)[0])
+        piso['exteinte'] = re.search(r'\b\w+\b$', plantaextint).group()
+
         piso['ascensor'] = response.xpath('//div[@class="details-property_features"][2]/ul/li[contains(text(),"ascensor")]/text()').extract_first()
         piso['urlpiso'] =response.url
-        piso['idpiso'] =re.findall(r'[0-9]+',response.url)
-        piso['calle'] = response.xpath('//li[@class="header-map-list"][1]/text()').extract_first()
-        piso['barrio'] = response.xpath('//li[@class="header-map-list"][2]/text()').extract_first()
-        piso['distrito'] = response.xpath('//li[@class="header-map-list"][3]/text()').extract_first()
+        piso['idpiso'] =int(re.findall(r'[0-9]+',response.url)[0])
+        piso['calle'] = response.xpath('//li[@class="header-map-list"][1]/text()').extract_first().strip()
+        piso['barrio'] = response.xpath('//li[@class="header-map-list"][2]/text()').extract_first().strip()
+        piso['distrito'] = response.xpath('//li[@class="header-map-list"][3]/text()').extract_first().strip()
+        
         yield piso

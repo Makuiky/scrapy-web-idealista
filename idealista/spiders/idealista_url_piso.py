@@ -41,7 +41,7 @@ class Idealistaurlpiso(scrapy.Spider):
 
         links = LinkExtractor(
             allow_domains=['idealista.com'],
-            restrict_xpaths=['//div[@class= "item-info-container"]/a']
+            restrict_xpaths=['//div[@class= "item-info-container  "]/a']
             #allow="/es/"
         ).extract_links(response)
         
