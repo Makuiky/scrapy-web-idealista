@@ -32,6 +32,7 @@ class Piso(scrapy.Item):
 class UrlPag(scrapy.Item):
     url= scrapy.Field()
     links = scrapy.Field()
+    cantpisos = scrapy.Field()
     pass
 
 class UrlPiso(scrapy.Item):

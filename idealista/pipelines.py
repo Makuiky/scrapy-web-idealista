@@ -15,13 +15,18 @@ class SqliteRutinapag(object):
 
     def __init__(self):
         self.create_connection()
+        self.eliminate_table()
         self.create_table()
-
+        
     def create_connection(self):
         self.conn = sqlite3.connect('idealista.db')
         self.cur = self.conn.cursor()
 
+    def eliminate_table(self):
+        self.cur.execute('''DROP TABLE paginas_pisos''')                
+                        
     def create_table(self):
+        
         self.cur.execute('''CREATE TABLE IF NOT EXISTS paginas_pisos
                          (url_pag TEXT UNIQUE)''')
         
@@ -30,10 +35,16 @@ class SqliteRutinapag(object):
             self.guardar_pag_pisos(item)
             return item
 
-    def guardar_pag_pisos(self, item):      
+    def guardar_pag_pisos(self, item):
+        ultpag= (int(item.get('cantpisos'))//30)+2
+        for i in range(1,ultpag):
+            urlgenerada = item.get('url')+'pagina-'+str(i)+'.htm'
+            self.cur.execute("""INSERT OR IGNORE INTO paginas_pisos values (?)""",(
+            urlgenerada,
+            ))
         self.cur.execute("""INSERT OR IGNORE INTO paginas_pisos values (?)""",(
             item.get('url'),
-        ))
+            ))
         self.conn.commit()
     def close_spider(self, spider):
         self.cur.close()

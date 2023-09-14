@@ -8,6 +8,7 @@ from idealista.items import UrlPag
 from scrapy.http import Request
 
 
+
 class Idealistaurlpag(scrapy.Spider):
     # Nombre de la araña
     name = 'urlpag'
@@ -30,18 +31,7 @@ class Idealistaurlpag(scrapy.Spider):
 
     def parse(self, response):
         urls = UrlPag()
-
-        links = LinkExtractor(
-            allow_domains=['idealista.com'],
-            restrict_xpaths=['//a[@class= "icon-arrow-right-after"]']
-            #allow="/es/"
-        ).extract_links(response)
         
-        outlinks = [] 
-        for link in links:
-            url = link.url
-            outlinks.append(url) # Añadimos el enlace en la lista
-            yield Request(url, callback=self.parse) # Generamos la petición
-
-        urls['url'] =response.url
+        urls['url'] = response.url
+        urls['cantpisos'] = response.xpath('//li[5]/span[@class="breadcrumb-navigation-element-info"]/text()').extract_first()
         yield urls
