@@ -95,10 +95,33 @@ class SqliteRutinaItemsPiso(object):
                          disposicion_a_la_calle VARCHAR(10),
                          fecha_de_registro TIMESTAMP
                         )''')
-        
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS evolucion_precio_pisos
+                        (id_piso INT,
+                        precio INT,
+                        fecha_de_registro TIMESTAMP   
+                        )''')
     def process_item(self, item, spider):
+            self.actualizar_precio_piso(item)
             self.guardar_item_piso(item)
+            self.registrar_evolucion_piso(item)
             return item
+    
+    def registrar_evolucion_piso(self,item):
+         self.cur.execute('''INSERT INTO evolucion_precio_pisos(
+                          id_piso,
+                          precio,
+                          fecha_de_registro
+                          ) VALUES (?,?,CURRENT_TIMESTAMP)''',(
+                               item.get('idpiso'),
+                               item.get('precio'),
+                          ))
+    
+    def actualizar_precio_piso(self,item):
+         self.cur.execute('''UPDATE items_pisos SET precio=?,euros_m2=?, fecha_de_registro=CURRENT_TIMESTAMP WHERE id_piso=?''',(
+              item.get('precio'),
+              item.get('eurosporm2'),
+              item.get('idpiso'),
+         ))
     
     def guardar_item_piso(self, item):      
         self.cur.execute("""INSERT OR IGNORE INTO items_pisos(
