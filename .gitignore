@@ -2,3 +2,4 @@
 *.csv
 *.pyc
 idealista/spiders/start_url.py
+start_url.txt

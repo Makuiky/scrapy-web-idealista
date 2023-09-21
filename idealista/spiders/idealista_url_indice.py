@@ -16,18 +16,10 @@ class Idealistaurlpag(scrapy.Spider):
         'ITEM_PIPELINES': {'idealista.pipelines.SqliteRutinapag': 300,}
     }
     allowed_domains = ['idealista.com']
-    
-    start_urls = [
-       
-        'https://www.idealista.com/venta-viviendas/valencia/extramurs/',
-        'https://www.idealista.com/venta-viviendas/valencia/quatre-carreres/',
-        'https://www.idealista.com/venta-viviendas/valencia/poblats-maritims/',
-        'https://www.idealista.com/venta-viviendas/valencia/benicalap/',
-        'https://www.idealista.com/venta-viviendas/valencia/camins-al-grau/',
-        'https://www.idealista.com/venta-viviendas/valencia/rascanya/',
-        'https://www.idealista.com/venta-viviendas/valencia/jesus/',
-        'https://www.idealista.com/venta-viviendas/valencia/l-olivereta/'
-    ]
+    start_urls=list()
+    with open('start_url.txt','r') as urls:
+        for urlini in urls:
+            start_urls.append(urlini.strip())
 
     def parse(self, response):
         urls = UrlPag()

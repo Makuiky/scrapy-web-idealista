@@ -53,17 +53,20 @@ class SqliteRutinaurlpiso(object):
 
     def __init__(self):
         self.create_connection()
+        self.eliminate_table()
         self.create_table()
-
+        
     def create_connection(self):
         self.conn = sqlite3.connect('idealista.db')
         self.cur = self.conn.cursor()
+        
+    def eliminate_table(self):
+        self.cur.execute('''DROP TABLE IF EXISTS urls_pisos''')
 
     def create_table(self):
         self.cur.execute('''CREATE TABLE IF NOT EXISTS urls_pisos
                          (url_piso TEXT UNIQUE)''')
         
-
     def process_item(self, item, spider):
             self.guardar_url_pisos(item)
             return item

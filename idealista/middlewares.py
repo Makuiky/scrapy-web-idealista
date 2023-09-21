@@ -39,7 +39,7 @@ class IdealistaSpiderMiddleware:
     def process_spider_exception(self, response, exception, spider):
         # Called when a spider or process_spider_input() method
         # (from other spider middleware) raises an exception.
-
+        
         # Should return either None or an iterable of Request or item objects.
         pass
 
@@ -92,7 +92,7 @@ class IdealistaDownloaderMiddleware:
     def process_exception(self, request, exception, spider):
         # Called when a download handler or a process_request()
         # (from other downloader middleware) raises an exception.
-
+        
         # Must either:
         # - return None: continue processing this exception
         # - return a Response object: stops process_exception() chain
